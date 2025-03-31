@@ -20,12 +20,11 @@ func (m *ToyProgrammer) GoProgram(
 		WithMountedCache("/go/pkg/mod", dag.CacheVolume("go_mod_cache")).
 		WithWorkdir("/app")
 	result := dag.LLM().
-	
-		WithToyWorkspace(dag.ToyWorkspace(container).Write("assignment.txt", assignment)).
+		WithWorkspace(dag.Workspace(container).Write("assignment.txt", assignment)).
 		WithPrompt("You are an expert go programmer. You have access to a workspace").
 		WithPrompt("Complete the assignment written at assignment.txt").
 		WithPrompt("Don't stop until the code builds").
-		ToyWorkspace().
+		Workspace().
 		Container()
 	if qa {
 		return dag.LLM().

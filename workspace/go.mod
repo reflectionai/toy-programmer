@@ -1,4 +1,4 @@
-module dagger/toy-workspace
+module dagger/workspace
 
 go 1.23.2
 
