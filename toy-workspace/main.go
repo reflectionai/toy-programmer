@@ -12,14 +12,12 @@ type ToyWorkspace struct {
 	Container *dagger.Container
 }
 
-func New() ToyWorkspace {
+// New creates a new ToyWorkspace with the given container.
+// The container should be configured with the appropriate runtime environment
+// and workdir set to "/app".
+func New(container *dagger.Container) ToyWorkspace {
 	return ToyWorkspace{
-		// Build a base container optimized for Go development
-		Container: dag.Container().
-			From("golang").
-			WithDefaultTerminalCmd([]string{"/bin/bash"}).
-			WithMountedCache("/go/pkg/mod", dag.CacheVolume("go_mod_cache")).
-			WithWorkdir("/app"),
+		Container: container,
 	}
 }
 

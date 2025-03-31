@@ -14,8 +14,14 @@ func (m *ToyProgrammer) GoProgram(
 	// Run LLM-powered QA on the result
 	// +optional
 	qa bool) *dagger.Container {
+	container := dag.Container().
+		From("golang").
+		WithDefaultTerminalCmd([]string{"/bin/bash"}).
+		WithMountedCache("/go/pkg/mod", dag.CacheVolume("go_mod_cache")).
+		WithWorkdir("/app")
 	result := dag.LLM().
-		WithToyWorkspace(dag.ToyWorkspace().Write("assignment.txt", assignment)).
+	
+		WithToyWorkspace(dag.ToyWorkspace(container).Write("assignment.txt", assignment)).
 		WithPrompt("You are an expert go programmer. You have access to a workspace").
 		WithPrompt("Complete the assignment written at assignment.txt").
 		WithPrompt("Don't stop until the code builds").
